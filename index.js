@@ -1,48 +1,55 @@
-const display=document.getElementById("display");
-let timer=null;
-let startTime=0;
-let elapsedTime=0;
-let isRunning=false;
+const choices=["rock","paper","scissors"];
+const playerDisplay=document.getElementById("playerDisplay");
+const computerDisplay=document.getElementById("computerDisplay");
+const resultDisplay=document.getElementById("resultDisplay");
+console.log(resultDisplay);
+const playerScoreDisplay=document.getElementById("playerScoreDisplay");
+const computerScoreDisplay=document.getElementById("computerScoreDisplay");
+let playerScore=0;
+let computerScore=0;
 
-function start(){
-if(!isRunning)
+function playGame(playerChoice)
 {
-    startTime=Date.now()-elapsedTime;
-    timer=setInterval(update,10);
-    isRunning=true;
-}
-}
+    const computerChoice=choices[Math.floor(Math.random()*3)];
 
-function stop(){
-if(isRunning)
-{
-    clearInterval(timer);
-    elapsedTime=Date.now-startTime;
-    isRunning=false;
-}
-}
+    let result="";
 
-function reset(){
-clearInterval(timer);
-startTime=0;
-elapsedTime=0;
-isRunning=false;
-display.textContent="00:00:00:00";
-}
+    if(playerChoice===computerChoice)
+    {
+        result="IT'S A TIE";
+    }
+    else
+    {
+        switch(playerChoice){
+            case "scissors":
+                result=(computerChoice==="paper")? "YOU WIN!":"YOU LOSE!";
+                break;
+                 case "paper":
+                result=(computerChoice==="rock")? "YOU WIN!":"YOU LOSE!";
+                break;
+                 case "rock":
+                result=(computerChoice==="scissors")? "YOU WIN!":"YOU LOSE!";
+                break;
+        }
+    }
 
-function update(){
-const currentTime=Date.now();
-elapsedTime=currentTime-startTime;
+    playerDisplay.textContent=`PLAYER: ${playerChoice}`;
+    computerDisplay.textContent=`Computer: ${computerChoice}`;
+    console.log(result);
+    resultDisplay.textContent=result;
+resultDisplay.classList.remove("greenText","redText");
 
-let hours = Math.floor(elapsedTime/(1000*60*60));
-let minutes =Math.floor(elapsedTime/(1000*60)%60);
-let seconds=Math.floor(elapsedTime/1000%60);
-let milliseconds=Math.floor(elapsedTime%1000 /10);
-
-hours=String(hours).padStart(2,"0");
-minutes=String(minutes).padStart(2,"0");
-seconds=String(seconds).padStart(2,"0");
-milliseconds=String(milliseconds).padStart(2,"0");
-
-display.textContent=`${hours}:${minutes}:${seconds}:${milliseconds}`;
+    switch(result){
+        case "YOU WIN!":
+            resultDisplay.classList.add("greenText");
+            playerScore++;
+            console.log(playerScore);
+            playerScoreDisplay.textContent=playerScore;
+            break;
+        case "YOU LOSE!":
+            resultDisplay.classList.add("redText");
+            computerScore++;
+            computerScoreDisplay.textContent=computerScore;
+            break;    
+    }
 }
